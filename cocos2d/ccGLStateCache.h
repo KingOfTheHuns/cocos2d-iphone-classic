@@ -126,6 +126,12 @@ void ccGLBindTexture2D( GLuint textureId );
  @since v2.1.0
  */
 void ccGLBindTexture2DN( GLuint textureUnit, GLuint textureId );
+    
+/** If the texture was bound, it will invalidate the cached for texture unit 0.
+ If CC_ENABLE_GL_STATE_CACHE is disabled, it will call glBindTexture() directly.
+ @since v2.1.0
+ */
+void ccGLResetTexture2DN( GLuint textureUnit, GLuint textureId );    
 
 /** It will delete a given texture. If the texture was bound, it will invalidate the cached for texture unit 0.
  If CC_ENABLE_GL_STATE_CACHE is disabled, it will call glDeleteTextures() directly.

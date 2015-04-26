@@ -152,6 +152,15 @@ void ccGLBindTexture2DN( GLuint textureUnit, GLuint textureId )
 #endif
 }
 
+void ccGLResetTexture2DN( GLuint textureUnit, GLuint textureId ) {
+#if CC_ENABLE_GL_STATE_CACHE
+	NSCAssert1( textureUnit < kCCMaxActiveTexture, @"cocos2d ERROR: Increase kCCMaxActiveTexture to %d!", textureUnit - GL_TEXTURE0);
+	if( _ccCurrentBoundTexture[ textureUnit ] != textureId )
+	{
+		_ccCurrentBoundTexture[ textureUnit ] = -1;
+	}
+#endif
+}
 
 void ccGLDeleteTexture( GLuint textureId )
 {
