@@ -30,7 +30,7 @@ precision lowp float;					\n\
 										\n\
 uniform		vec4 u_color;				\n\
 										\n\
-varying vec2 v_texCoord;				\n\
+varying highp vec2 v_texCoord;			\n\
 										\n\
 uniform sampler2D CC_Texture0;			\n\
 										\n\

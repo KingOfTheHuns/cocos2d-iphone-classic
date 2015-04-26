@@ -30,7 +30,7 @@ attribute vec4 a_color;								\n\
 													\n\
 #ifdef GL_ES										\n\
 varying lowp vec4 v_fragmentColor;					\n\
-varying mediump vec2 v_texCoord;					\n\
+varying highp vec2 v_texCoord;	     				\n\
 #else												\n\
 varying vec4 v_fragmentColor;						\n\
 varying vec2 v_texCoord;							\n\

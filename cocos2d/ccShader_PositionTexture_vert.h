@@ -28,7 +28,7 @@ attribute vec4 a_position;								\n\
 attribute vec2 a_texCoord;								\n\
 														\n\
 #ifdef GL_ES											\n\
-varying mediump vec2 v_texCoord;						\n\
+varying highp vec2 v_texCoord;		    				\n\
 #else													\n\
 varying vec2 v_texCoord;								\n\
 #endif													\n\

@@ -29,7 +29,7 @@ precision lowp float;								\n\
 #endif												\n\
 													\n\
 varying vec4 v_fragmentColor;						\n\
-varying vec2 v_texCoord;							\n\
+varying highp vec2 v_texCoord;						\n\
 uniform sampler2D CC_Texture0;						\n\
 													\n\
 void main()											\n\
