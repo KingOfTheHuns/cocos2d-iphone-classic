@@ -164,17 +164,16 @@ const NSInteger kSceneFade = 0xFADEFADE;
 -(void) onExit
 {
 	[super onExit];
-	
+	[_outScene onExit];
 	// enable events while transitions
-	CCDirector *director = [CCDirector sharedDirector];
+    // This enables onEnterTransitionDidFinish to override
+    // setDispatchEvents in the same tick
 #ifdef __CC_PLATFORM_IOS
-	[[director touchDispatcher] setDispatchEvents: YES];
+	[[[CCDirector sharedDirector] touchDispatcher] setDispatchEvents: YES];
 #elif defined(__CC_PLATFORM_MAC)
-	[[director eventDispatcher] setDispatchEvents: YES];
+	[[[CCDirector sharedDirector] eventDispatcher] setDispatchEvents: YES];
 #endif
 	
-
-	[_outScene onExit];
 
 	// _inScene should not receive the onEnter callback
 	// only the onEnterTransitionDidFinish
