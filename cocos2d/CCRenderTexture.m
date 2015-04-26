@@ -422,8 +422,9 @@
 	[self end];
 	
 	// make data provider with data.
-	
-	CGBitmapInfo bitmapInfo	= kCGImageAlphaPremultipliedLast | kCGBitmapByteOrderDefault;
+	// Note: use kCGImageAlphaNoneSkipLast because otherwise partial transparency
+    //           will cause some artifacts
+	CGBitmapInfo bitmapInfo	= kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault;
 	CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer, myDataLength, NULL);
 	CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
 	CGImageRef iref	= CGImageCreate(tx, ty,
