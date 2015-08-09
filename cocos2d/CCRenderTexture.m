@@ -390,71 +390,75 @@
 
 -(CGImageRef) newCGImage
 {
+    return [self newCGImage:YES];
+}
+
+-(CGImageRef) newCGImage:(BOOL)flipY {
     NSAssert(_pixelFormat == kCCTexture2DPixelFormat_RGBA8888,@"only RGBA8888 can be saved as image");
-	
-	
-	CGSize s = [_texture contentSizeInPixels];
-	int tx = s.width;
-	int ty = s.height;
-	
-	int bitsPerComponent			= 8;
+    
+    
+    CGSize s = [_texture contentSizeInPixels];
+    int tx = s.width;
+    int ty = s.height;
+    
+    int bitsPerComponent			= 8;
     int bitsPerPixel                = 4 * 8;
     int bytesPerPixel               = bitsPerPixel / 8;
-	int bytesPerRow					= bytesPerPixel * tx;
-	NSInteger myDataLength			= bytesPerRow * ty;
-	
-	GLubyte *buffer	= calloc(myDataLength,1);
-	GLubyte *pixels	= calloc(myDataLength,1);
-	
-	
-	if( ! (buffer && pixels) ) {
-		CCLOG(@"cocos2d: CCRenderTexture#getCGImageFromBuffer: not enough memory");
-		free(buffer);
-		free(pixels);
-		return nil;
-	}
-	
-	[self begin];
-	
-
-	glReadPixels(0,0,tx,ty,GL_RGBA,GL_UNSIGNED_BYTE, buffer);
-
-	[self end];
-	
-	// make data provider with data.
-	// Note: use kCGImageAlphaNoneSkipLast because otherwise partial transparency
+    int bytesPerRow					= bytesPerPixel * tx;
+    NSInteger myDataLength			= bytesPerRow * ty;
+    
+    GLubyte *buffer	= calloc(myDataLength,1);
+    GLubyte *pixels	= calloc(myDataLength,1);
+    
+    
+    if( ! (buffer && pixels) ) {
+        CCLOG(@"cocos2d: CCRenderTexture#getCGImageFromBuffer: not enough memory");
+        free(buffer);
+        free(pixels);
+        return nil;
+    }
+    
+    [self begin];
+    
+    
+    glReadPixels(0,0,tx,ty,GL_RGBA,GL_UNSIGNED_BYTE, buffer);
+    
+    [self end];
+    
+    // make data provider with data.
+    // Note: use kCGImageAlphaNoneSkipLast because otherwise partial transparency
     //           will cause some artifacts
-	CGBitmapInfo bitmapInfo	= kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault;
-	CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer, myDataLength, NULL);
-	CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-	CGImageRef iref	= CGImageCreate(tx, ty,
-									bitsPerComponent, bitsPerPixel, bytesPerRow,
-									colorSpaceRef, bitmapInfo, provider,
-									NULL, false,
-									kCGRenderingIntentDefault);
-	
-	CGContextRef context = CGBitmapContextCreate(pixels, tx,
-												 ty, CGImageGetBitsPerComponent(iref),
-												 CGImageGetBytesPerRow(iref), CGImageGetColorSpace(iref),
-												 bitmapInfo);
-	
-	// vertically flipped
-	if( YES ) {
-		CGContextTranslateCTM(context, 0.0f, ty);
-		CGContextScaleCTM(context, 1.0f, -1.0f);
-	}
-	CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, tx, ty), iref);
-	CGImageRef image = CGBitmapContextCreateImage(context);
-	
-	CGContextRelease(context);
-	CGImageRelease(iref);
-	CGColorSpaceRelease(colorSpaceRef);
-	CGDataProviderRelease(provider);
-	
-	free(pixels);
-	free(buffer);
-	
-	return image;
+    CGBitmapInfo bitmapInfo	= kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault;
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer, myDataLength, NULL);
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGImageRef iref	= CGImageCreate(tx, ty,
+                                    bitsPerComponent, bitsPerPixel, bytesPerRow,
+                                    colorSpaceRef, bitmapInfo, provider,
+                                    NULL, false,
+                                    kCGRenderingIntentDefault);
+    
+    CGContextRef context = CGBitmapContextCreate(pixels, tx,
+                                                 ty, CGImageGetBitsPerComponent(iref),
+                                                 CGImageGetBytesPerRow(iref), CGImageGetColorSpace(iref),
+                                                 bitmapInfo);
+    
+    // vertically flipped
+    if( flipY ) {
+        CGContextTranslateCTM(context, 0.0f, ty);
+        CGContextScaleCTM(context, 1.0f, -1.0f);
+    }
+    CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, tx, ty), iref);
+    CGImageRef image = CGBitmapContextCreateImage(context);
+    
+    CGContextRelease(context);
+    CGImageRelease(iref);
+    CGColorSpaceRelease(colorSpaceRef);
+    CGDataProviderRelease(provider);
+    
+    free(pixels);
+    free(buffer);
+    
+    return image;
 }
 
 -(BOOL) saveToFile:(NSString*)name

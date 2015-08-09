@@ -133,10 +133,15 @@ typedef enum
 /** clears the texture with a specified stencil value */
 - (void)clearStencil:(int)stencilValue;
 
-/* creates a new CGImage from with the texture's data.
+/* creates a new CGImage from with the texture's data. (Flipped vertically)
  Caller is responsible for releasing it by calling CGImageRelease().
  */
 -(CGImageRef) newCGImage;
+
+/* creates a new CGImage from with the texture's data. FlipY tells to flip the image vertically or not.
+ Caller is responsible for releasing it by calling CGImageRelease().
+ */
+-(CGImageRef) newCGImage:(BOOL)flipY;
 
 /** saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
  Returns YES if the operation is successful.
